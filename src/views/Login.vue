@@ -1,38 +1,30 @@
 <template>
-  <div>
-    <div class="login_content">
-      <div class="login_box">
-        <div class="img_box">
-          <img src="@/assets/logo.png" alt="" />
-        </div>
-        <div class="login_form">
-          <el-form
-            ref="loginFormRef"
-            :model="loginForm"
-            :rules="loginFormRules"
-          >
-            <el-form-item class="ipt_box" prop="username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="请输入用户名"
-                prefix-icon="el-icon-user-solid"
-              ></el-input>
-            </el-form-item>
-            <el-form-item class="ipt_box" prop="password">
-              <el-input
-                v-model="loginForm.password"
-                placeholder="请输入密码"
-                prefix-icon="el-icon-lock"
-                type="password"
-              ></el-input>
-            </el-form-item>
-          </el-form>
-          <div class="btn">
-            <el-button type="primary" @click="validateLoginForm"
-              >登录</el-button
-            >
-            <el-button type="info" @click="resetForm">重置</el-button>
-          </div>
+  <div class="login_content">
+    <div class="login_box">
+      <div class="img_box">
+        <img src="@/assets/logo.png" alt="" />
+      </div>
+      <div class="login_form">
+        <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
+          <el-form-item class="ipt_box" prop="username">
+            <el-input
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+              prefix-icon="el-icon-user-solid"
+            ></el-input>
+          </el-form-item>
+          <el-form-item class="ipt_box" prop="password">
+            <el-input
+              v-model="loginForm.password"
+              placeholder="请输入密码"
+              prefix-icon="el-icon-lock"
+              type="password"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="btn">
+          <el-button type="primary" @click="validateLoginForm">登录</el-button>
+          <el-button type="info" @click="resetForm">重置</el-button>
         </div>
       </div>
     </div>
@@ -73,6 +65,8 @@ export default {
           this.$message({
             message: '登录成功',
             type: 'success',
+            duration: 2000,
+            showClose: true,
           });
           window.sessionStorage.setItem('token', res.data.token);
           //编程式导航
@@ -87,8 +81,8 @@ export default {
 <style lang="less" scoped>
 .login_content {
   width: 100%;
-  height: 650px;
-  background-color: aquamarine;
+  height: 100%;
+  background-color: rgb(43, 151, 115);
   .login_box {
     position: absolute;
     left: 50%;
