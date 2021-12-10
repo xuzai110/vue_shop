@@ -29,7 +29,7 @@
       </el-row>
       <!-- 数据渲染表格 -->
       <el-table :data="userList" style="width: 100%" stripe border>
-        <el-table-column type="index" label="序号"> </el-table-column>
+        <el-table-column type="index"> </el-table-column>
         <el-table-column prop="username" label="姓名"> </el-table-column>
         <el-table-column prop="email" label="邮箱"> </el-table-column>
         <el-table-column prop="mobile" label="电话"> </el-table-column>
@@ -70,7 +70,7 @@
                 type="warning"
                 icon="el-icon-setting"
                 size="mini"
-                @click="settingUserInfo(scope.row.id)"
+                @click="settingUserInfo(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -154,6 +154,36 @@
         <el-button type="primary" @click="editUser">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配角色对话框 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="roleDialogVisible"
+      width="50%"
+      @close="seDialogClose"
+    >
+      <div class="userInfo">
+        <p>当前用户:{{ userInfo.username }}</p>
+
+        <p>当前角色:{{ userInfo.role_name }}</p>
+        <p>
+          新的角色:
+          <el-select v-model="selectRole" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="roleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRoles">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -233,6 +263,10 @@ export default {
           { validator: checkMobile, trigger: 'blur' },
         ],
       },
+      roleDialogVisible: false,
+      userInfo: {},
+      roleList: {},
+      selectRole: '',
     };
   },
   methods: {
@@ -303,14 +337,18 @@ export default {
       this.$refs.editFormRef.resetFields();
     },
     //删除用户
-    deleteUserInfo(id) {
-      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(async () => {
-          const { data: res } = await this.$http.delete('users/' + id);
+    async deleteUserInfo(id) {
+      const result = await this.$confirm(
+        '此操作将永久删除该用户, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+        .then(() => {
+          this.$http.delete('users/' + id);
           if (res.meta.status !== 200)
             return this.$message.error('删除用户失败');
           this.$message.success('删除用户成功');
@@ -321,7 +359,43 @@ export default {
             type: 'info',
             message: '已取消删除',
           });
+          return 'yejiang';
         });
+
+      // if (result !== 'confirm') return;
+      // const { data: res } = await this.$http.delete('users/' + id);
+      // if (res.meta.status !== 200) return this.$message.error('删除用户失败');
+      // this.$message.success('删除用户成功');
+      // this.getUserList();
+    },
+    async settingUserInfo(role) {
+      this.userInfo = role;
+      const { data: res } = await this.$http.get(`roles`);
+      console.log(res);
+      if (res.meta.status !== 200)
+        return this.$message.error('获取角色信息失败');
+      this.roleList = res.data;
+      this.roleDialogVisible = true;
+    },
+    async setRoles() {
+      if (!this.selectRole) {
+        return this.$message.warning('请选择要分配的角色');
+      }
+      const { data: res } = await this.$http.put(
+        `users/${this.userInfo.id}/role`,
+        { rid: this.selectRole }
+      );
+      if (res.meta.status !== 200) {
+        return this.$message.error('分配新角色失败！');
+      }
+      this.$message.success('分配角色成功！');
+      this.getUserList();
+      this.roleDialogVisible = false;
+      console.log(this.userInfo);
+    },
+    seDialogClose() {
+      this.selectRole = '';
+      this.userInfo = {};
     },
   },
   created() {
@@ -331,17 +405,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-breadcrumb {
-  font-size: 12px;
-  margin-bottom: 15px;
-}
-.el-card {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
-  .el-table {
-    margin-top: 20px;
-  }
-  .el-pagination {
-    margin-top: 15px;
-  }
+.userInfo {
+  text-align: left;
 }
 </style>
