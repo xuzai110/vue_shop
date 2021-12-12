@@ -6,7 +6,7 @@
       <el-breadcrumb-item>角色列表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-      <el-row type="flex" :gutter="15">
+      <el-row :gutter="15">
         <el-col :span="4">
           <el-button type="primary">添加角色</el-button>
         </el-col>

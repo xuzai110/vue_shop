@@ -6,6 +6,7 @@ import Welcome from '@/views/Welcome.vue'
 import UserLIst from '@/views/UserList.vue'
 import RightsList from '@/views/Rights.vue'
 import RolesList from '@/views/Roles.vue'
+import GoodsCate from '@/views/GoodsCate.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,7 +20,8 @@ const routes = [
             { path: '/welcome', component: Welcome },
             { path: '/users', component: UserLIst },
             { path: '/rights', component: RightsList },
-            { path: '/roles', component: RolesList }
+            { path: '/roles', component: RolesList },
+            { path: '/categories', component: GoodsCate }
         ]
     }
 ]

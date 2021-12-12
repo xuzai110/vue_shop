@@ -6,7 +6,9 @@
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
+      <!-- gutter 表示每栏之间的间隔 -->
       <el-row :gutter="15">
+        <!-- 一行分为24栅格，span表示每栏自身占多数栅格 -->
         <el-col :span="9">
           <el-input
             placeholder="请输入内容"

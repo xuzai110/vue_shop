@@ -78,7 +78,6 @@ export default {
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('/menus');
-      console.log(res);
       this.menuList = res.data;
     },
     collapseMenu() {
@@ -92,6 +91,9 @@ export default {
   created() {
     this.getMenuList();
     this.activePath = window.sessionStorage.getItem('activePath');
+  },
+  destroyed() {
+    window.sessionStorage.setItem('activePath', '');
   },
 };
 </script>
