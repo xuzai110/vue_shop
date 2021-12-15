@@ -6,8 +6,8 @@
       <el-breadcrumb-item>商品分类</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-      <el-row :gutter="15">
-        <el-col :span="4">
+      <el-row>
+        <el-col>
           <el-button type="primary" @click="showAddCate">商品分类</el-button>
         </el-col>
       </el-row>
